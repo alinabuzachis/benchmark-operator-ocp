@@ -24,10 +24,10 @@
   set_fact:
     operator_dir: ./operator-sdk/testdata/{{ operator_type }}/{{ operator_subdir }}
 
-- name: Set the correct directory path for the Ansible memcached operator example.
-  set_fact:
-    operator_dir: ./ansible/{{ operator_subdir }}
-  when: operator_type == 'ansible'
+# - name: Set the correct directory path for the Ansible memcached operator example.
+#   set_fact:
+#     operator_dir: ./ansible/{{ operator_subdir }}
+#   when: operator_type == 'ansible'
 
 - name: Build, push, and deploy the {{ operator_type }} memcached operator.
   shell: "{{ item }}"
@@ -98,6 +98,10 @@
     name: "{{ operator_pod.resources[0].metadata.name }}"
     namespace: memcached-operator-system
     wait: false
+  
+- name: Pause to allow cluster to stabilize.
+  pause:
+    seconds: 20
 
 - name: Deploy {{ memcached_cr_count }} {{ operator_type }} Memcached CRs.
   community.okd.k8s:
@@ -114,12 +118,9 @@
       - "{{ app_label_selector }}"
     namespace: memcached-operator-system
   register: memcached_pods
-  until: (memcached_pods.resources | count) == memcached_cr_count
+  until: (memcached_pods.resources | count) ==  {{ memcached_cr_count }}
   delay: 3
   retries: 120
-
-- debug:
-    msg: "{{memcached_pods}}"
 
 # Benchmark 3: Benchmark how long it takes to remove all pods.
 - name: Un-deploy {{ memcached_cr_count }} {{ operator_type }} memcached CRs.

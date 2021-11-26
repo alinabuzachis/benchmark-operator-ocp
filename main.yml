@@ -7,12 +7,12 @@
     - config.yml
 
   tasks:
-    - name: Clone the operator-sdk project.
-      git:
-        repo: https://github.com/operator-framework/operator-sdk.git
-        version: "{{ operator_sdk_version }}"
-        dest: ./operator-sdk
-        force: true
+    # - name: Clone the operator-sdk project.
+    #   git:
+    #     repo: https://github.com/operator-framework/operator-sdk.git
+    #     version: "{{ operator_sdk_version }}"
+    #     dest: ./operator-sdk
+        #force: true
 
     - name: Attempt to fix file permissions.
       file:
@@ -23,9 +23,9 @@
     - name: Deploy a memcached DaemonSet so image is pulled to all nodes.
       include_tasks: tasks/memcached-daemonset.yml
 
-    - name: Deploy cert-manager (required for Go operator).
-      include_tasks: tasks/cert-manager.yml
-      when: "'go' == operator_under_test"
+    # - name: Deploy cert-manager (required for Go operator).
+    #   include_tasks: tasks/cert-manager.yml
+    #   when: "'go' == operator_under_test"
 
     - name: Build, deploy, benchmark, and undeploy operators.
       include_tasks: tasks/operator-tasks.yml
