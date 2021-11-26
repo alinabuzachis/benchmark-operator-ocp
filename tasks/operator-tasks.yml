@@ -24,10 +24,10 @@
   set_fact:
     operator_dir: ./operator-sdk/testdata/{{ operator_type }}/{{ operator_subdir }}
 
-# - name: Set the correct directory path for the Ansible memcached operator example.
-#   set_fact:
-#     operator_dir: ./ansible/{{ operator_subdir }}
-#   when: operator_type == 'ansible'
+- name: Set the correct directory path for the Ansible memcached operator example.
+  set_fact:
+    operator_dir: ./ansible/memcached-operator_working
+  when: operator_type == 'ansible'
 
 - name: Build, push, and deploy the {{ operator_type }} memcached operator.
   shell: "{{ item }}"

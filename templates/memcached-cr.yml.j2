@@ -1,5 +1,5 @@
 ---
-apiVersion: cache.example.com/v1alpha1
+apiVersion: cache.cache.example.com/v1
 kind: Memcached
 metadata:
   name: "{{ 'memcached-%03d' | format(item | int) }}"

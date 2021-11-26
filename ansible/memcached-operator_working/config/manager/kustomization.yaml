@@ -12,5 +12,5 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 images:
 - name: controller
-  newName: ttl.sh/memcached-operator-wor
+  newName: ttl.sh/operator-perf-test-prova-ansible
   newTag: 1h
