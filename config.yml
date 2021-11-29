@@ -15,12 +15,8 @@ memcached_cr_count: 15
 
 # Options for the Docker images and registry to use.
 registry: ttl.sh
-image_name: operator-perf-test-prova
+image_name: benchmark-operator
 image_tag: 1h
-
-# What version of operator-sdk to use for testing.
-# NOTE: Keep in sync with operator RELEASE_VERSION in .github/workflows/CI.
-operator_sdk_version: v1.14.0
 
 # Versions for cluster addons.
 cert_manager_version: v0.16.1
