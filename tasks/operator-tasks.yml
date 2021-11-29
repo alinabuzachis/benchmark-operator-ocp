@@ -20,24 +20,14 @@
     operator_subdir: v2/memcached-operator
   when: operator_type == 'go'
 
-- name: Set the correct directory path for the memcached operators.
-  set_fact:
-    operator_dir: ./operator-sdk/testdata/{{ operator_type }}/{{ operator_subdir }}
-
-- name: Set the correct directory path for the Ansible memcached operator example.
-  set_fact:
-    operator_dir: ./ansible/memcached-operator_working
-  when: operator_type == 'ansible'
-
 - name: Build, push, and deploy the {{ operator_type }} memcached operator.
   shell: "{{ item }}"
   args:
-    chdir: "{{ operator_dir }}"
+    chdir: ./operator-sdk/testdata/{{ operator_type }}/{{ operator_subdir }}
   with_items:
     # Can't use make for docker-build target because of Go operator test dep.
     - docker build . -t $IMG
     - make docker-push
-    - make install
     - make deploy
   environment:
     IMG: "{{ operator_image }}"
@@ -54,11 +44,11 @@
   failed_when: false
   until: operator_pod.resources[0].status.phase == 'Running'
   delay: 3
-  retries: 15
+  retries: 120
 
 - name: Pause to allow cluster to stabilize.
   pause:
-    seconds: 10
+    seconds: 20
 
 # Benchmark 1: Deploy Memcached CRs.
 - name: Deploy {{ memcached_cr_count }} {{ operator_type }} memcached CRs.
@@ -73,7 +63,7 @@
     kind: Pod
     label_selectors:
       - "{{ app_label_selector }}"
-    namespace: memcached-operator-system
+    namespace: default
   register: memcached_pods
   until: (memcached_pods.resources | count) >= memcached_cr_count
   delay: 3
@@ -82,7 +72,7 @@
 - name: "[B1] Wait for {{ operator_type }} Memcached Pods to be ready."
   command: >
     kubectl wait --for=condition=Ready
-    pods --selector {{ app_label_selector }} --namespace memcached-operator-system --timeout=300s
+    pods --selector {{ app_label_selector }} --namespace default --timeout=300s
   changed_when: false
 
 # Benchmark 2: Kill Operator Pod, benchmark re-reconciliation.
@@ -96,7 +86,7 @@
     api_version: v1
     kind: Pod
     name: "{{ operator_pod.resources[0].metadata.name }}"
-    namespace: memcached-operator-system
+    namespace: default
     wait: false
   
 - name: Pause to allow cluster to stabilize.
@@ -116,7 +106,7 @@
     kind: Pod
     label_selectors:
       - "{{ app_label_selector }}"
-    namespace: memcached-operator-system
+    namespace: default
   register: memcached_pods
   until: (memcached_pods.resources | count) ==  {{ memcached_cr_count }}
   delay: 3
@@ -135,7 +125,7 @@
     kind: Pod
     label_selectors:
       - "{{ app_label_selector }}"
-    namespace: memcached-operator-system
+    namespace: default
   register: memcached_pods
   until: (memcached_pods.resources | count) == 0
   delay: 5

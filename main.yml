@@ -7,12 +7,12 @@
     - config.yml
 
   tasks:
-    # - name: Clone the operator-sdk project.
-    #   git:
-    #     repo: https://github.com/operator-framework/operator-sdk.git
-    #     version: "{{ operator_sdk_version }}"
-    #     dest: ./operator-sdk
-        #force: true
+    - name: Clone the operator-sdk project.
+      git:
+        repo: https://github.com/alinabuzachis/operator-sdk.git
+        version: "benchmark-operator"
+        dest: ./operator-sdk
+        force: true
 
     - name: Attempt to fix file permissions.
       file:
