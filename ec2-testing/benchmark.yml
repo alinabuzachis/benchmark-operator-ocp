@@ -91,6 +91,5 @@
         mode: 0664
       loop: "{{ molecule_result.results }}"
       delegate_to: localhost
-      no_log: true
       become: false
       tags: ['molecule']
