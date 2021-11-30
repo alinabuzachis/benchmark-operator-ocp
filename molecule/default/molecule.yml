@@ -13,8 +13,8 @@ platforms:
 provisioner:
   name: ansible
   env:
-    K8S_AUTH_KUBECONFIG: ${KUBECONFIG:-~/.kube/config}
-    KUBECONFIG: ${KUBECONFIG:-~/.kube/config}
+    K8S_AUTH_KUBECONFIG: ${KUBECONFIG:-/home/ubuntu/ocp/auth/kubeconfig}
+    KUBECONFIG: ${KUBECONFIG:-/home/ubuntu/ocp/auth/kubeconfig}
     OPERATOR_UNDER_TEST: ${OPERATOR_UNDER_TEST:-ansible}
   config_options:
     defaults:
