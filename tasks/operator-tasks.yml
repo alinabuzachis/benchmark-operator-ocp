@@ -108,7 +108,7 @@
       - "{{ app_label_selector }}"
     namespace: default
   register: memcached_pods
-  until: (memcached_pods.resources | count) ==  {{ memcached_cr_count }}
+  until: (memcached_pods.resources | count) ==  memcached_cr_count
   delay: 3
   retries: 120
 
@@ -136,7 +136,7 @@
   async: 10
   poll: 0
   args:
-    chdir: "{{ operator_dir }}"
+    chdir: ./operator-sdk/{{ operator_type }}/memcached-operator
   environment:
     IMG: "{{ operator_image }}"
 
