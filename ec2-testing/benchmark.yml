@@ -3,11 +3,6 @@
   hosts: openshift_perftest
   become: true
 
-  vars:
-    operator_sdk_version: v1.0.0
-    kind_version: v0.8.1
-    kubectl_version: v1.19.0
-
   pre_tasks:
     - name: Ensure apt caches are up to date.
       apt:
@@ -57,28 +52,28 @@
         mode: 0755
 
 - name: Run benchmark.
-  hosts: operator_sdk_perftest
+  hosts: openshift_perftest
   become: true
 
   tasks:
-    - name: Clone operator-sdk-performance-testing project.
+    - name: Clone benchmark-operator-ocp project.
       git:
-        repo: https://github.com/geerlingguy/operator-sdk-performance-testing.git
-        version: master
-        dest: ~/operator-sdk-performance-testing
+        repo: https://github.com/alinabuzachis/benchmark-operator-ocp.git
+        version: main
+        dest: ~/benchmark-operator-ocp
 
     - name: Run molecule test scenarios.
       command: molecule test
       args:
-        chdir: ~/operator-sdk-performance-testing
+        chdir: ~/benchmark-operator-ocp
       environment:
         OPERATOR_UNDER_TEST: "{{ item }}"
       register: molecule_result
       tags: ['molecule']
       loop:
         - ansible
-        - go
-        - helm
+        #- go
+        #- helm
     
     - name: Pause to allow to get results.
       pause:
