@@ -3,11 +3,6 @@
   hosts: openshift_perftest
   become: true
 
-  vars:
-    operator_sdk_version: v1.0.0
-    kind_version: v0.8.1
-    kubectl_version: v1.19.0
-
   pre_tasks:
     - name: Ensure apt caches are up to date.
       apt:
@@ -57,7 +52,7 @@
         mode: 0755
 
 - name: Run benchmark.
-  hosts: operator_sdk_perftest
+  hosts: openshift_perftest
   become: true
 
   tasks:
@@ -77,8 +72,8 @@
       tags: ['molecule']
       loop:
         - ansible
-        - go
-        - helm
+        #- go
+        #- helm
     
     - name: Pause to allow to get results.
       pause:
