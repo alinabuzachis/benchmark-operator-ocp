@@ -2,6 +2,11 @@
 - name: Prepare host for benchmark.
   hosts: openshift_perftest
   become: true
+  
+  vars:
+   kind_version: v0.11.1
+   kubectl_version: v1.21.0
+   operator_sdk_version: v1.15.0
 
   pre_tasks:
     - name: Ensure apt caches are up to date.
@@ -56,11 +61,11 @@
   become: true
 
   tasks:
-    - name: Clone benchmark-operator-ocp project.
-      git:
-        repo: https://github.com/alinabuzachis/benchmark-operator-ocp.git
-        version: main
-        dest: ~/benchmark-operator-ocp
+    #- name: Clone benchmark-operator-ocp project.
+    #  git:
+    #    repo: https://github.com/alinabuzachis/benchmark-operator-ocp.git
+    #    version: main
+    #    dest: ~/benchmark-operator-ocp
 
     - name: Run molecule test scenarios.
       command: molecule test
@@ -72,12 +77,12 @@
       tags: ['molecule']
       loop:
         - ansible
-        #- go
-        #- helm
+        - go
+        - helm
     
     - name: Pause to allow to get results.
       pause:
-        seconds: 10
+        seconds: 20
 
     - name: Store results in a local result file.
       copy:
