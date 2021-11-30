@@ -61,16 +61,16 @@
   become: true
 
   tasks:
-    - name: Clone operator-sdk-performance-testing project.
+    - name: Clone benchmark-operator-ocp project.
       git:
-        repo: https://github.com/geerlingguy/operator-sdk-performance-testing.git
-        version: master
-        dest: ~/operator-sdk-performance-testing
+        repo: https://github.com/alinabuzachis/benchmark-operator-ocp.git
+        version: main
+        dest: ~/benchmark-operator-ocp
 
     - name: Run molecule test scenarios.
       command: molecule test
       args:
-        chdir: ~/operator-sdk-performance-testing
+        chdir: ~/benchmark-operator-ocp
       environment:
         OPERATOR_UNDER_TEST: "{{ item }}"
       register: molecule_result
