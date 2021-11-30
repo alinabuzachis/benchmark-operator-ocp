@@ -2,11 +2,6 @@
 - name: Prepare host for benchmark.
   hosts: openshift_perftest
   become: true
-  
-  vars:
-   kind_version: v0.11.1
-   kubectl_version: v1.21.0
-   operator_sdk_version: v1.15.0
 
   vars:
     kind_version: v0.11.1
