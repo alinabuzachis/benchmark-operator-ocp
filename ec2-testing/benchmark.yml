@@ -1,6 +1,6 @@
 ---
 - name: Prepare host for benchmark.
-  hosts: operator_sdk_perftest
+  hosts: openshift_perftest
   become: true
 
   vars:
@@ -68,7 +68,7 @@
         dest: ~/operator-sdk-performance-testing
 
     - name: Run molecule test scenarios.
-      command: molecule test -s kind
+      command: molecule test
       args:
         chdir: ~/operator-sdk-performance-testing
       environment:
@@ -79,11 +79,15 @@
         - ansible
         - go
         - helm
+    
+    - name: Pause to allow to get results.
+      pause:
+        seconds: 10
 
     - name: Store results in a local result file.
       copy:
         content: "{{ item.stdout }}"
-        dest: "./result-{{ item.item }}.txt"
+        dest: "./result-{{ item.item }}-{{ ansible_date_time }}.txt"
         mode: 0664
       loop: "{{ molecule_result.results }}"
       delegate_to: localhost
