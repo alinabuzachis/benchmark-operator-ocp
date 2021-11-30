@@ -8,6 +8,11 @@
    kubectl_version: v1.21.0
    operator_sdk_version: v1.15.0
 
+  vars:
+    kind_version: v0.11.1
+    kubectl_version: v1.21.0
+    operator_sdk_version: v1.15.0
+
   pre_tasks:
     - name: Ensure apt caches are up to date.
       apt:
@@ -42,7 +47,7 @@
 
     - name: Download Operator SDK.
       get_url:
-        url: "https://github.com/operator-framework/operator-sdk/releases/download/{{ operator_sdk_version }}/{{ item }}-{{ operator_sdk_version }}-x86_64-linux-gnu"
+        url: "https://github.com/operator-framework/operator-sdk/releases/download/{{ operator_sdk_version }}/{{ item }}_linux_amd64"
         dest: /usr/bin/{{ item }}
         mode: 0755
       loop:
@@ -61,16 +66,16 @@
   become: true
 
   tasks:
-    #- name: Clone benchmark-operator-ocp project.
-    #  git:
-    #    repo: https://github.com/alinabuzachis/benchmark-operator-ocp.git
-    #    version: main
-    #    dest: ~/benchmark-operator-ocp
+    # - name: Clone benchmark-operator-ocp project. # commented because it's private for now
+    #   git:
+    #     repo: https://github.com/alinabuzachis/benchmark-operator-ocp.git
+    #     version: main
+    #     dest: ~/benchmark-operator-ocp
 
     - name: Run molecule test scenarios.
       command: molecule test
       args:
-        chdir: ~/benchmark-operator-ocp
+        chdir: /home/ubuntu/benchmark-operator-ocp
       environment:
         OPERATOR_UNDER_TEST: "{{ item }}"
       register: molecule_result
