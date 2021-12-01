@@ -139,4 +139,3 @@
     chdir: ./operator-sdk/testdata/{{ operator_type }}/{{ operator_subdir }}
   environment:
     IMG: "{{ operator_image }}"
-
