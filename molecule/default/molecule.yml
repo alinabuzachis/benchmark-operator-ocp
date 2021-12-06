@@ -18,6 +18,7 @@ provisioner:
     #K8S_AUTH_KUBECONFIG: ${KUBECONFIG:-~/.kube/config}
     #KUBECONFIG: ${KUBECONFIG:-~/.kube/config}
     OPERATOR_UNDER_TEST: ${OPERATOR_UNDER_TEST:-ansible}
+    #ENABLE_TURBO_MODE: ${ENABLE_TURBO_MODE:-true}
   config_options:
     defaults:
       callback_whitelist: profile_tasks

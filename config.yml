@@ -11,7 +11,7 @@ operator_subdir: memcached-operator
 app_label_selector: app=memcached
 
 # How many CRs to deploy.
-memcached_cr_count: 1000
+memcached_cr_count: 300
 
 # Options for the Docker images and registry to use.
 registry: ttl.sh
